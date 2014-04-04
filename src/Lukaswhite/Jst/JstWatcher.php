@@ -21,7 +21,7 @@ class JstWatcher {
 		$files = new \Illuminate\Filesystem\Filesystem;
 		$tracker = new \JasonLewis\ResourceWatcher\Tracker;
 
-		$watcher = new \JasonLewis\ResourceWatcher\ResourceWatcher($tracker, $files);
+		$watcher = new \JasonLewis\ResourceWatcher\Watcher($tracker, $files);
 
 		$listener = $watcher->watch($dir);
 
