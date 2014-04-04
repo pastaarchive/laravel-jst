@@ -35,7 +35,9 @@ class JstGenerator {
 
 		if (count($files)) {
 			foreach ($files as $file) {
-				$contents = str_replace(array("\n","'"), array('\n',"\'"), $file->getContents());
+				$contents = str_replace(array("\n","'"), array('',"\'"), $file->getContents());
+				
+				$contents = preg_replace('!\s+!', ' ', $contents);
 					
 				$js .= sprintf("JST['%s/%s'] = %s('%s');\n", Config::get('jst::source_prefix'), $file->getRelativePathname(), $template_func, $contents);		
 
