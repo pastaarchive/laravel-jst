@@ -39,7 +39,7 @@ class JstGenerator {
 				
 				$contents = preg_replace('!\s+!', ' ', $contents);
 					
-				$js .= sprintf("JST['%s%s'] = %s('%s');\n", Config::get('jst::source_prefix'), $file->getRelativePathname(), $template_func, $contents);		
+				$js .= sprintf("JST['%s%s'] = %s('%s');\n", Config::get('jst::source_prefix'), preg_replace("/\\.[^.\\s]{3,4}$/", "", $file->getRelativePathname()), $template_func, $contents);		
 
 			}
 		}
