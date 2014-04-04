@@ -39,12 +39,12 @@ class JstGenerator {
 				
 				$contents = preg_replace('!\s+!', ' ', $contents);
 					
-				$js .= sprintf("JST['%s/%s'] = %s('%s');\n", Config::get('jst::source_prefix'), $file->getRelativePathname(), $template_func, $contents);		
+				$js .= sprintf("JST['%s/%s'] = %s('%s');\n", Config::get('jst::source_prefix'), ltrim($file->getRelativePathname(), '/'), $template_func, $contents);		
 
 			}
 		}
 
-		$output_filename = base_path() . Config::get('jst::dest_dir') . Config::get('jst::output_filename');
+		$output_filename = base_path() . Config::get('jst::dest_dir') . '/' . Config::get('jst::output_filename');
 		
 		if (!file_put_contents($output_filename, $js)) {
 			throw new \Exception("Could not write JST file to $output_filename. Check the permissions, perhaps?");
