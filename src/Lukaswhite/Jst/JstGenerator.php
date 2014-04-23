@@ -38,8 +38,14 @@ class JstGenerator {
 				$contents = str_replace(array("\n","'"), array('',"\'"), $file->getContents());
 				
 				$contents = preg_replace('!\s+!', ' ', $contents);
-					
-				$js .= sprintf("JST['%s%s'] = %s('%s');\n", Config::get('jst::source_prefix'), preg_replace("/\\.[^.\\s]{3,4}$/", "", $file->getRelativePathname()), $template_func, $contents);		
+				
+				$ext = pathinfo($file->getRelativePathname(), PATHINFO_EXTENSION);
+				
+				if($ext != 'mustache'){
+					$js .= sprintf("JST['%s%s'] = %s('%s');\n", Config::get('jst::source_prefix'), preg_replace("/\\.[^.\\s]{3,4}$/", "", $file->getRelativePathname()), $template_func, $contents);
+				}else{
+					$js .= sprintf("JST['%s%s'] = function(data){return Mustache.render('%s', data);};\n", Config::get('jst::source_prefix'), preg_replace("/\\.[^.\\s]{8}$/", "", $file->getRelativePathname()), $contents);
+				}
 
 			}
 		}
