@@ -16,8 +16,6 @@ class JstGenerator {
 	 */
 	public static function run()
 	{
-		$finder = new Finder;
-
 		$dir = base_path() . Config::get('jst::source_dir');
 
 		if (!file_exists($dir)) {
@@ -25,7 +23,9 @@ class JstGenerator {
 		}
 
 		//JST
-		$files = iterator_to_array($finder->files()->in($dir.'/jst'), false);
+		$jstdir = $dir.'/jst';
+		$finder = new Finder;
+		$files = iterator_to_array($finder->files()->in($jstdir), false);
 
 		$template_func = '_.template';
 		$js = '';
@@ -39,20 +39,22 @@ class JstGenerator {
 				
 				$ext = pathinfo($file->getRelativePathname(), PATHINFO_EXTENSION);
 				
-				$topath = preg_replace("/\\.[^.\\s]{3,4}$/", "", $file->getRelativePathname());
-				$topath = str_replace('jst/', '', $topath);
-				$js .= sprintf("JST['%s%s'] = %s('%s');\n", Config::get('jst::source_prefix'), $topath, $template_func, $contents);
+				$topath = str_replace($jstdir, '', $file->getRelativePathname());
+				$topath = preg_replace("/\\.[^.\\s]{3,4}$/", "", $topath);
+				$js .= sprintf("JST['%s'] = %s('%s');\n", $topath, $template_func, $contents);
 			}
 		}
 
-		$output_filename = base_path() . Config::get('jst::dest_dir') . '/jst.js';
+		$output_filename = base_path() . Config::get('jst::dest_dir') . '/jst.js'; 
 		
 		if (!file_put_contents($output_filename, $js)) {
 			throw new \Exception("Could not write JST file to $output_filename. Check the permissions, perhaps?");
 		}
 		
 		//BN
-		$files = iterator_to_array($finder->files()->in($dir.'/bm'), false);
+		$bndir = $dir.'/bn';
+		$finder = new Finder;
+		$files = iterator_to_array($finder->files()->in($bndir), false);
 
 		$js = '';
 		$js .= "var CAFBN = {};\n";
@@ -65,12 +67,12 @@ class JstGenerator {
 				
 				$ext = pathinfo($file->getRelativePathname(), PATHINFO_EXTENSION);
 				
-				$topath = preg_replace("/\\.[^.\\s]{3,4}$/", "", $file->getRelativePathname());
-				$topath = str_replace('bm/', '', $topath);
+				$topath = str_replace($bndir, '', $file->getRelativePathname());
+				$topath = preg_replace("/\\.[^.\\s]{3,4}$/", "", $topath);
 				if($ext == 'html'){
-					$js .= sprintf("CAFBN.%s = '%s');\n", $topath, $contents);
-				}elseif($text == 'css'){
-					$js .= sprintf("CAFBN.style = '%s');\n", $contents);
+					$js .= sprintf("CAFBN.%s = '%s';\n", $topath, $contents);
+				}elseif($ext == 'css'){
+					$js .= sprintf("CAFBN.style = '%s';\n", $contents);
 				}
 			}
 		}
