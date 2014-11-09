@@ -75,7 +75,7 @@ class JstGenerator {
 			}
 		}
 
-		$output_filename = base_path() . Config::get('jst::dest_dir') . '/bn.js;
+		$output_filename = base_path() . Config::get('jst::dest_dir') . '/bn.js';
 		
 		if (!file_put_contents($output_filename, $js)) {
 			throw new \Exception("Could not write JST file to $output_filename. Check the permissions, perhaps?");
