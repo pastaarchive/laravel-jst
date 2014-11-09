@@ -45,7 +45,7 @@ class JstGenerator {
 			}
 		}
 
-		$output_filename = base_path() . Config::get('jst::dest_dir') . '/' . Config::get('jst::jst_filename');
+		$output_filename = base_path() . Config::get('jst::dest_dir') . '/jst.js';
 		
 		if (!file_put_contents($output_filename, $js)) {
 			throw new \Exception("Could not write JST file to $output_filename. Check the permissions, perhaps?");
@@ -54,7 +54,6 @@ class JstGenerator {
 		//BN
 		$files = iterator_to_array($finder->files()->in($dir.'/bm'), false);
 
-		$template_func = '_.template';
 		$js = '';
 		$js .= "var CAFBN = {};\n";
 		
@@ -69,14 +68,14 @@ class JstGenerator {
 				$topath = preg_replace("/\\.[^.\\s]{3,4}$/", "", $file->getRelativePathname());
 				$topath = str_replace('bm/', '', $topath);
 				if($ext == 'html'){
-					$js .= sprintf("CAFBN. = '%s');\n", preg_replace("/\\.[^.\\s]{3,4}$/", "", $topath, $contents);
+					$js .= sprintf("CAFBN.%s = '%s');\n", $topath, $contents);
 				}elseif($text == 'css'){
-					$js .= sprintf("CAFBN.style = '%s');\n", preg_replace("/\\.[^.\\s]{3,4}$/", "", $topath, $contents);
+					$js .= sprintf("CAFBN.style = '%s');\n", $contents);
 				}
 			}
 		}
 
-		$output_filename = base_path() . Config::get('jst::dest_dir') . '/' . Config::get('jst::bn_filename');
+		$output_filename = base_path() . Config::get('jst::dest_dir') . '/bn.js;
 		
 		if (!file_put_contents($output_filename, $js)) {
 			throw new \Exception("Could not write JST file to $output_filename. Check the permissions, perhaps?");
