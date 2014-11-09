@@ -39,9 +39,9 @@ class JstGenerator {
 				
 				$ext = pathinfo($file->getRelativePathname(), PATHINFO_EXTENSION);
 				
-				if($ext != 'mustache'){
-					$js .= sprintf("JST['%s%s'] = %s('%s');\n", Config::get('jst::source_prefix'), preg_replace("/\\.[^.\\s]{3,4}$/", "", $file->getRelativePathname()), $template_func, $contents);
-				}
+				$topath = preg_replace("/\\.[^.\\s]{3,4}$/", "", $file->getRelativePathname());
+				$topath = str_replace('jst/', '', $topath);
+				$js .= sprintf("JST['%s%s'] = %s('%s');\n", Config::get('jst::source_prefix'), $topath, $template_func, $contents);
 			}
 		}
 
@@ -66,10 +66,12 @@ class JstGenerator {
 				
 				$ext = pathinfo($file->getRelativePathname(), PATHINFO_EXTENSION);
 				
+				$topath = preg_replace("/\\.[^.\\s]{3,4}$/", "", $file->getRelativePathname());
+				$topath = str_replace('bm/', '', $topath);
 				if($ext == 'html'){
-					$js .= sprintf("CAFBN. = '%s');\n", preg_replace("/\\.[^.\\s]{3,4}$/", "", $file->getRelativePathname()), $contents);
+					$js .= sprintf("CAFBN. = '%s');\n", preg_replace("/\\.[^.\\s]{3,4}$/", "", $topath, $contents);
 				}elseif($text == 'css'){
-					$js .= sprintf("CAFBN.style = '%s');\n", preg_replace("/\\.[^.\\s]{3,4}$/", "", $file->getRelativePathname()), $contents);
+					$js .= sprintf("CAFBN.style = '%s');\n", preg_replace("/\\.[^.\\s]{3,4}$/", "", $topath, $contents);
 				}
 			}
 		}
