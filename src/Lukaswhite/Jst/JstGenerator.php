@@ -68,12 +68,10 @@ class JstGenerator {
 				$ext = pathinfo($file->getRelativePathname(), PATHINFO_EXTENSION);
 				
 				$topath = str_replace($bmdir, '', $file->getRelativePathname());
+				$topath = str_replace("BM_", '', $topath);
 				$topath = preg_replace("/\\.[^.\\s]{3,4}$/", "", $topath);
-				if($ext == 'html'){
-					$js .= sprintf("CAFBM.%s = '%s';\n", $topath, $contents);
-				}elseif($ext == 'css'){
-					$js .= sprintf("CAFBM.style = '%s';\n", $contents);
-				}
+				
+				$js .= sprintf("CAFBM.%s = '%s';\n", $topath, $contents);
 			}
 		}
 
