@@ -51,13 +51,13 @@ class JstGenerator {
 			throw new \Exception("Could not write JST file to $output_filename. Check the permissions, perhaps?");
 		}
 		
-		//BN
-		$bndir = $dir.'/bn';
+		//BM
+		$bmdir = $dir.'/bm';
 		$finder = new Finder;
-		$files = iterator_to_array($finder->files()->in($bndir), false);
+		$files = iterator_to_array($finder->files()->in($bmdir), false);
 
 		$js = '';
-		$js .= "var CAFBN = {};\n";
+		$js .= "var CAFBM = {};\n";
 		
 		if (count($files)) {
 			foreach ($files as $file) {
@@ -67,17 +67,17 @@ class JstGenerator {
 				
 				$ext = pathinfo($file->getRelativePathname(), PATHINFO_EXTENSION);
 				
-				$topath = str_replace($bndir, '', $file->getRelativePathname());
+				$topath = str_replace($bmdir, '', $file->getRelativePathname());
 				$topath = preg_replace("/\\.[^.\\s]{3,4}$/", "", $topath);
 				if($ext == 'html'){
-					$js .= sprintf("CAFBN.%s = '%s';\n", $topath, $contents);
+					$js .= sprintf("CAFBM.%s = '%s';\n", $topath, $contents);
 				}elseif($ext == 'css'){
-					$js .= sprintf("CAFBN.style = '%s';\n", $contents);
+					$js .= sprintf("CAFBM.style = '%s';\n", $contents);
 				}
 			}
 		}
 
-		$output_filename = base_path() . Config::get('jst::dest_dir') . '/bn.js';
+		$output_filename = base_path() . Config::get('jst::dest_dir') . '/bm.js';
 		
 		if (!file_put_contents($output_filename, $js)) {
 			throw new \Exception("Could not write JST file to $output_filename. Check the permissions, perhaps?");
